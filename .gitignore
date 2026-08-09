@@ -1,0 +1,5 @@
+node_modules/
+.env
+forum.db
+forum.db-shm
+forum.db-wal

@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sniper Scope</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #06111f;
+      --surface: #09192d;
+      --surface2: #0d2038;
+      --surface3: #112944;
+
+      --text: #f7fbff;
+      --muted: #8194ae;
+
+      --border: rgba(74,153,255,.14);
+
+      --primary: #258bff;
+      --secondary: #ff4d94;
+
+      --primary-soft: rgba(37,139,255,.13);
+      --secondary-soft: rgba(255,77,148,.11);
+
+      --shadow: 0 20px 70px rgba(0,0,0,.28);
+    }
+
+    html[data-theme="light"] {
+      --bg: #fff7fb;
+      --surface: #ffffff;
+      --surface2: #fffafd;
+      --surface3: #fff0f6;
+
+      --text: #271d28;
+      --muted: #8b7886;
+
+      --border: rgba(225,76,137,.13);
+
+      --primary: #ff4088;
+      --secondary: #3286ff;
+
+      --primary-soft: rgba(255,64,136,.11);
+      --secondary-soft: rgba(50,134,255,.10);
+
+      --shadow: 0 20px 70px rgba(179,68,116,.09);
+    }
+
+    body {
+      min-height: 100vh;
+
+      font-family: Inter, sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 10% 0%,
+          var(--primary-soft),
+          transparent 27%
+        ),
+        radial-gradient(
+          circle at 95% 10%,
+          var(--secondary-soft),
+          transparent 24%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      transition: .3s;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* HEADER */
+
+    header {
+      height: 74px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 6vw;
+
+      border-bottom:
+        1px solid var(--border);
+
+      background:
+        color-mix(
+          in srgb,
+          var(--bg) 85%,
+          transparent
+        );
+
+      backdrop-filter:
+        blur(18px);
+
+      position: sticky;
+      top: 0;
+
+      z-index: 20;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 13px;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+
+      box-shadow:
+        0 8px 30px
+        var(--primary-soft);
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .theme-btn {
+      width: 40px;
+      height: 40px;
+
+      border-radius: 11px;
+
+      border:
+        1px solid var(--border);
+
+      color: var(--text);
+
+      background:
+        var(--surface);
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height:
+        calc(100vh - 74px);
+
+      display: grid;
+      place-items: center;
+
+      padding:
+        70px
+        20px;
+    }
+
+    .hero-box {
+      width:
+        min(1100px, 100%);
+
+      display: grid;
+
+      grid-template-columns:
+        1.1fr
+        .9fr;
+
+      gap: 50px;
+
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+
+      gap: 8px;
+
+      margin-bottom: 17px;
+
+      padding:
+        7px
+        11px;
+
+      border-radius: 100px;
+
+      color: var(--primary);
+
+      background:
+        var(--primary-soft);
+
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      font-size:
+        clamp(45px, 7vw, 83px);
+
+      line-height: .95;
+
+      letter-spacing: -4px;
+
+      margin-bottom: 22px;
+
+      font-weight: 900;
+    }
+
+    .hero h1 span {
+      background:
+        linear-gradient(
+          100deg,
+          var(--primary),
+          var(--secondary)
+        );
+
+      background-clip: text;
+
+      -webkit-background-clip: text;
+
+      color: transparent;
+    }
+
+    .hero-description {
+      max-width: 600px;
+
+      color: var(--muted);
+
+      font-size: 16px;
+
+      line-height: 1.7;
+    }
+
+    .launch-status {
+      margin-top: 30px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 11px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .online-dot {
+      width: 9px;
+      height: 9px;
+
+      border-radius: 50%;
+
+      background: #29d877;
+
+      box-shadow:
+        0 0 15px #29d877;
+    }
+
+    /* LOGIN */
+
+    .login-card {
+      padding: 30px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--surface),
+          var(--surface2)
+        );
+
+      box-shadow:
+        var(--shadow);
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+
+      display: grid;
+      place-items: center;
+
+      margin-bottom: 20px;
+
+      border-radius: 18px;
+
+      color: white;
+
+      font-size: 28px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--secondary)
+        );
+    }
+
+    .login-card h2 {
+      margin-bottom: 8px;
+
+      font-size: 23px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+    #telegram-login-wrapper {
+      margin-top: 22px;
+
+      display: flex;
+
+      justify-content: center;
+    }
+
+    .login-info {
+      display: grid;
+
+      gap: 9px;
+
+      margin-top: 22px;
+    }
+
+    .login-info-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding: 10px;
+
+      border-radius: 10px;
+
+      color: var(--muted);
+
+      background:
+        var(--surface3);
+
+      font-size: 11px;
+    }
+
+    /* FORUM */
+
+    .forum-section {
+      padding:
+        0
+        6vw
+        90px;
+    }
+
+    .forum {
+      max-width: 1200px;
+
+      margin: auto;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      background:
+        var(--surface);
+
+      box-shadow:
+        var(--shadow);
+    }
+
+    .forum-header {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      padding:
+        19px
+        21px;
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+    .forum-title h2 {
+      font-size: 17px;
+    }
+
+    .forum-title p {
+      margin-top: 4px;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    .empty-badge {
+      padding:
+        7px
+        10px;
+
+      border-radius: 100px;
+
+      color: var(--primary);
+
+      background:
+        var(--primary-soft);
+
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .empty {
+      min-height: 400px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      padding: 40px;
+    }
+
+    .empty-icon {
+      width: 80px;
+      height: 80px;
+
+      display: grid;
+      place-items: center;
+
+      margin-bottom: 18px;
+
+      border-radius: 23px;
+
+      color: var(--primary);
+
+      background:
+        var(--primary-soft);
+
+      font-size: 32px;
+    }
+
+    .empty h3 {
+      font-size: 20px;
+
+      margin-bottom: 8px;
+    }
+
+    .empty p {
+      max-width: 430px;
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      line-height: 1.6;
+    }
+
+    .stats {
+      max-width: 1200px;
+
+      margin:
+        17px
+        auto
+        0;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 17px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 15px;
+
+      background:
+        var(--surface);
+
+      box-shadow:
+        var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+
+      font-size: 22px;
+
+      color: var(--primary);
+    }
+
+    .stat span {
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    /* USER CARD */
+
+    .user-card {
+      display: none;
+
+      margin-top: 20px;
+
+      padding: 15px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 14px;
+
+      background:
+        var(--surface3);
+    }
+
+    .user-card.show {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 46px;
+      height: 46px;
+
+      border-radius: 50%;
+
+      object-fit: cover;
+
+      background:
+        var(--surface2);
+    }
+
+    .user-name {
+      font-size: 14px;
+
+      font-weight: 800;
+    }
+
+    .user-username {
+      margin-top: 3px;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    .success {
+      margin-top: 15px;
+
+      padding: 11px;
+
+      border-radius: 10px;
+
+      background:
+        rgba(41,216,119,.10);
+
+      color:
+        #29d877;
+
+      font-size: 11px;
+    }
+
+    footer {
+      padding:
+        25px
+        6vw;
+
+      text-align: center;
+
+      border-top:
+        1px solid var(--border);
+
+      color:
+        var(--muted);
+
+      font-size: 10px;
+    }
+
+    @media(max-width: 850px) {
+
+      .hero-box {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-left {
+        text-align: center;
+      }
+
+      .hero-description {
+        margin: auto;
+      }
+
+      .launch-status {
+        justify-content: center;
+      }
+
+      .stats {
+        grid-template-columns:
+          1fr
+          1fr;
+      }
+
+    }
+
+    @media(max-width: 500px) {
+
+      header {
+        padding:
+          0
+          17px;
+      }
+
+      .hero h1 {
+        font-size: 52px;
+      }
+
+      .stats {
+        grid-template-columns:
+          1fr;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+
+    <div class="logo-icon">
+      ⭐
+    </div>
+
+    <div>
+      Sniper <span>SCOPE</span>
+    </div>
+
+  </div>
+
+
+  <button
+    class="theme-btn"
+    id="themeButton"
+  >
+    ☀
+  </button>
+
+</header>
+
+
+<main>
+
+  <section class="hero">
+
+    <div class="hero-box">
+
+
+      <div class="hero-left">
+
+        <div class="tag">
+          ● ФОРУМ ОТКРЫТ
+        </div>
+
+
+        <h1>
+
+          Sniper
+
+          <span>
+            SCOPE
+          </span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+          Новый форум нашего
+          Telegram-сообщества.
+
+          Здесь будут обсуждения,
+          новости, предложения,
+          жалобы, события
+          и всё, что связано
+          с Brawl Stars.
+
+        </p>
+
+
+        <div class="launch-status">
+
+          <div class="online-dot"></div>
+
+          Форум только что запущен.
+
+        </div>
+
+      </div>
+
+
+      <div class="login-card">
+
+        <div class="login-logo">
+          ✈
+        </div>
+
+
+        <h2>
+          Войти на форум
+        </h2>
+
+
+        <p>
+
+          Авторизуйся через Telegram.
+
+          После входа сайт получит
+          твой Telegram ID,
+          имя, username и аватар.
+
+        </p>
+
+
+        <!-- =====================================
+             НАСТОЯЩАЯ TELEGRAM КНОПКА
+        ====================================== -->
+
+        <div id="telegram-login-wrapper">
+
+          <script
+            async
+            src="https://telegram.org/js/telegram-widget.js?22"
+
+            data-telegram-login="sniper_scope_bot"
+
+            data-size="large"
+
+            data-userpic="true"
+
+            data-radius="10"
+
+            data-request-access="write"
+
+            data-onauth="onTelegramAuth(user)">
+          </script>
+
+        </div>
+
+
+        <div
+          class="user-card"
+          id="userCard"
+        >
+
+          <img
+            class="user-avatar"
+            id="userAvatar"
+            alt=""
+          >
+
+
+          <div>
+
+            <div
+              class="user-name"
+              id="userName"
+            >
+            </div>
+
+
+            <div
+              class="user-username"
+              id="userUsername"
+            >
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="success"
+          id="successMessage"
+          style="display:none;"
+        >
+
+          ✓ Telegram аккаунт получен.
+
+        </div>
+
+
+        <div class="login-info">
+
+          <div class="login-info-item">
+
+            🔗
+
+            Один Telegram-аккаунт
+            = один форумный аккаунт
+
+          </div>
+
+
+          <div class="login-info-item">
+
+            🛡
+
+            Telegram ID используется
+            для связи с будущим ботом
+
+          </div>
+
+
+          <div class="login-info-item">
+
+            ⚠
+
+            Варны и баны позже
+            будут синхронизироваться
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+
+  <section class="forum-section">
+
+    <div class="forum">
+
+      <div class="forum-header">
+
+        <div class="forum-title">
+
+          <h2>
+            Последние темы
+          </h2>
+
+          <p>
+            Обсуждения сообщества
+          </p>
+
+        </div>
+
+
+        <div class="empty-badge">
+          0 ТЕМ
+        </div>
+
+      </div>
+
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          💬
+        </div>
+
+
+        <h3>
+          Здесь пока тихо
+        </h3>
+
+
+        <p>
+
+          Форум только открылся.
+
+          После регистрации
+          здесь можно будет создавать
+          темы и писать сообщения.
+
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <strong id="usersCount">
+          0
+        </strong>
+
+        <span>
+          Участников
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong>
+          0
+        </strong>
+
+        <span>
+          Тем
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong>
+          0
+        </strong>
+
+        <span>
+          Сообщений
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong>
+          0
+        </strong>
+
+        <span>
+          Онлайн
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  Sniper Scope © 2026
+  • форум сообщества
+  • не является официальным сайтом Supercell
+
+</footer>
+
+
+
+<script>
+
+  /* =====================================
+     TELEGRAM LOGIN CALLBACK
+  ====================================== */
+
+async function onTelegramAuth(user) {
+
+    console.log("TELEGRAM CALLBACK СРАБОТАЛ");
+    console.log(user);
+
+    alert("Telegram callback сработал");
+
+    try {
+
+        const response = await fetch(
+            "/api/auth/telegram",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(user)
+            }
+        );
+
+        console.log(
+            "STATUS:",
+            response.status
+        );
+
+        const result =
+            await response.json();
+
+        console.log(
+            "SERVER RESULT:",
+            result
+        );
+
+        if (!response.ok || !result.success) {
+
+            alert(
+                result.error ||
+                "Ошибка входа"
+            );
+
+            return;
+        }
+
+        alert(
+            "Вход успешен"
+        );
+
+        window.location.href =
+            "/forum.html";
+
+    } catch (error) {
+
+        console.error(
+            "AUTH ERROR:",
+            error
+        );
+
+        alert(
+            "Ошибка соединения с сервером"
+        );
+
+    }
+}
+
+
+
+ 
+
+
+
+  /* =====================================
+     THEME
+  ====================================== */
+
+  const html =
+    document.documentElement;
+
+
+  const themeButton =
+    document.getElementById(
+      "themeButton"
+    );
+
+
+  let theme =
+    localStorage.getItem(
+      "forum-theme"
+    ) || "dark";
+
+
+  function applyTheme() {
+
+    html.setAttribute(
+      "data-theme",
+      theme
+    );
+
+
+    themeButton.textContent =
+      theme === "dark"
+        ? "☀"
+        : "☾";
+
+
+    localStorage.setItem(
+      "forum-theme",
+      theme
+    );
+
+  }
+
+
+  applyTheme();
+
+
+  themeButton.addEventListener(
+    "click",
+    () => {
+
+      theme =
+        theme === "dark"
+          ? "light"
+          : "dark";
+
+
+      applyTheme();
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
