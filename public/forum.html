@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sniper SCOPE — Forum</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 20% 10%,
+                    rgba(37, 139, 255, .15),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(255, 77, 148, .12),
+                    transparent 30%
+                ),
+                #06111f;
+
+            color: white;
+        }
+
+        header {
+            height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6vw;
+
+            border-bottom:
+                1px solid rgba(74,153,255,.15);
+
+            background: #081624;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .logo span {
+            color: #258bff;
+        }
+
+        main {
+            min-height:
+                calc(100vh - 72px);
+
+            display: grid;
+            place-items: center;
+
+            padding: 30px;
+        }
+
+        .card {
+            width: min(500px, 100%);
+
+            padding: 30px;
+
+            border:
+                1px solid rgba(74,153,255,.18);
+
+            border-radius: 22px;
+
+            background: #0a1a2e;
+
+            box-shadow:
+                0 25px 80px rgba(0,0,0,.35);
+        }
+
+        .loading {
+            text-align: center;
+
+            color: #8298b5;
+
+            font-size: 14px;
+        }
+
+        .profile {
+            display: none;
+        }
+
+        .profile.show {
+            display: block;
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            background: #112944;
+        }
+
+        h1 {
+            margin: 0;
+
+            font-size: 25px;
+        }
+
+        .username {
+            margin-top: 5px;
+
+            color: #7da7db;
+        }
+
+        .role {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 7px 11px;
+
+            border-radius: 8px;
+
+            background:
+                rgba(37,139,255,.15);
+
+            color: #55a8ff;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+        }
+
+        .info {
+            margin-top: 22px;
+
+            display: grid;
+
+            gap: 8px;
+        }
+
+        .info-row {
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #102641;
+
+            color: #a0b0c5;
+
+            font-size: 12px;
+        }
+
+        .forum-button {
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 13px;
+
+            border: none;
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #258bff,
+                    #ff4d94
+                );
+
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .logout {
+            width: 100%;
+
+            margin-top: 10px;
+
+            padding: 11px;
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            border-radius: 11px;
+
+            color: #8ea1bb;
+
+            background: transparent;
+
+            cursor: pointer;
+        }
+
+        .error {
+            display: none;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            color: #ff7180;
+
+            background:
+                rgba(255,70,90,.1);
+
+            line-height: 1.5;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Sniper <span>SCOPE</span>
+    </div>
+
+    <div>
+        FORUM
+    </div>
+
+</header>
+
+
+<main>
+
+    <div class="card">
+
+        <div
+            id="loading"
+            class="loading"
+        >
+            Проверяем Telegram-аккаунт...
+        </div>
+
+
+        <div
+            id="error"
+            class="error"
+        >
+        </div>
+
+
+        <div
+            id="profile"
+            class="profile"
+        >
+
+            <div class="profile-top">
+
+                <img
+                    id="avatar"
+                    class="avatar"
+                    alt=""
+                >
+
+                <div>
+
+                    <h1 id="name">
+                        Пользователь
+                    </h1>
+
+                    <div
+                        id="username"
+                        class="username"
+                    >
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="role"
+                class="role"
+            >
+                MEMBER
+            </div>
+
+
+            <div class="info">
+
+                <div class="info-row">
+                    Telegram ID:
+                    <strong id="telegramId"></strong>
+                </div>
+
+                <div class="info-row">
+                    Варны:
+                    <strong id="warnings"></strong>
+                </div>
+
+                <div class="info-row">
+                    Дата регистрации:
+                    <strong id="createdAt"></strong>
+                </div>
+
+            </div>
+
+
+            <button
+                class="forum-button"
+                onclick="alert('Следующим шагом делаем настоящий форум 😎')"
+            >
+                Перейти к форуму
+            </button>
+
+
+            <button
+                class="logout"
+                id="logout"
+            >
+                Выйти из аккаунта
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+async function loadUser() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const profile =
+        document.getElementById("profile");
+
+    const errorBox =
+        document.getElementById("error");
+
+
+    try {
+
+        console.log(
+            "Запрашиваю /api/me..."
+        );
+
+
+        const response =
+            await fetch(
+                "/api/me",
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        console.log(
+            "/api/me STATUS:",
+            response.status
+        );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "/api/me RESULT:",
+            data
+        );
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                "Сессия не найдена"
+            );
+
+        }
+
+
+        const user =
+            data.user;
+
+
+        const fullName =
+            [
+                user.first_name,
+                user.last_name
+            ]
+            .filter(Boolean)
+            .join(" ");
+
+
+        document
+            .getElementById("name")
+            .textContent =
+                fullName ||
+                "Telegram User";
+
+
+        document
+            .getElementById("username")
+            .textContent =
+                user.username
+                    ? "@" + user.username
+                    : "Без username";
+
+
+        document
+            .getElementById("telegramId")
+            .textContent =
+                user.telegram_id;
+
+
+        document
+            .getElementById("warnings")
+            .textContent =
+                (user.warnings || 0) +
+                " / 3";
+
+
+        document
+            .getElementById("role")
+            .textContent =
+                user.role ||
+                "member";
+
+
+        document
+            .getElementById("createdAt")
+            .textContent =
+                user.created_at ||
+                "сегодня";
+
+
+        const avatar =
+            document.getElementById("avatar");
+
+
+        if (user.photo_url) {
+
+            avatar.src =
+                user.photo_url;
+
+        } else {
+
+            avatar.style.display =
+                "none";
+
+        }
+
+
+        loading.style.display =
+            "none";
+
+
+        profile.classList.add(
+            "show"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "FORUM ERROR:",
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        errorBox.textContent =
+            "Ошибка входа: " +
+            error.message;
+
+
+        errorBox.classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+document
+    .getElementById("logout")
+    .addEventListener(
+        "click",
+        async () => {
+
+            await fetch(
+                "/api/logout",
+                {
+                    method: "POST",
+                    credentials: "include"
+                }
+            );
+
+
+            window.location.href =
+                "/";
+
+        }
+    );
+
+
+loadUser();
+
+</script>
+
+</body>
+</html>
